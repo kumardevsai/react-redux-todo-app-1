@@ -8,7 +8,10 @@ export default class AlreadyDoneList extends Component {
         <div className="todolist">
           <h1>Already Done</h1>
           <ul id="done-items" className="list-unstyled">
-            <TodoListAlreadyDone todos={this.props.todos} />
+            <TodoListAlreadyDone
+              deleteTodo={this.props.actions.deleteTodo}
+              todos={this.props.todos}
+            />
           </ul>
         </div>
       </div>

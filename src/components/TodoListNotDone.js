@@ -39,6 +39,7 @@ class TodoListNotDone extends Component {
             value={this.state.item}
             onChange={this.handleChange}
             onSubmit={this.handleSubmit}
+            completeAll={this.props.actions.completeAll}
           />
           <hr />
           <ul id="sortable" className="list-unstyled">
