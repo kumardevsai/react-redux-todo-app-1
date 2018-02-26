@@ -55,7 +55,7 @@ class TodoListNotDone extends Component {
                 />
               ))}
           </ul>
-          <TodoFooter itemLeft={this.props.todos.length} />
+          <TodoFooter itemLeft={this.props.todos} />
         </div>
       </div>
     )

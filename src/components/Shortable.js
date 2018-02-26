@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 
 export default class componentName extends Component {
   handleCheckItem = (e) => {
@@ -8,20 +8,26 @@ export default class componentName extends Component {
   render() {
     const { todo, isDone, todoId } = this.props
     return (
-      <li className="ui-state-default">
-        <div className="checkbox">
-          <label>
-            <input
-              value={todoId}
-              name="todoCheck"
-              type="checkbox"
-              onChange={this.handleCheckItem}
-              checked={isDone}
-            />{' '}
-            {todo}
-          </label>
-        </div>
-      </li>
+      <Fragment>
+        {isDone ? (
+          ''
+        ) : (
+          <li className="ui-state-default">
+            <div className="checkbox">
+              <label>
+                <input
+                  value={todoId}
+                  name="todoCheck"
+                  type="checkbox"
+                  onChange={this.handleCheckItem}
+                  checked={isDone}
+                />{' '}
+                {todo}
+              </label>
+            </div>
+          </li>
+        )}
+      </Fragment>
     )
   }
 }

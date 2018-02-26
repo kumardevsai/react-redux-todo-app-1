@@ -20,11 +20,8 @@ export default function todos(state = initialState, action) {
         },
       ]
 
-
-
     case COMPLETE_TODO:
       return state.map(todo => (todo.id === action.id ? { ...todo, done: !todo.done } : todo))
-
 
     default:
       return state
