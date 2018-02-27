@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-
 import TodoListNotDone from '../components/TodoListNotDone'
 import AlreadyDoneList from '../components/AlreadyDoneList'
 import * as TodoActions from '../actions'
@@ -21,6 +20,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   actions: bindActionCreators(TodoActions, dispatch),
+  // checkItem: item => dispatch(TodoActions.checkDuplicateItem(item)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)

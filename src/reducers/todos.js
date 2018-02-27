@@ -1,4 +1,10 @@
-import { ADD_TODO, COMPLETE_TODO, DELETE_TODO, COMPLETE_ALL } from '../constants/ActionTypes'
+import {
+  ADD_TODO,
+  COMPLETE_TODO,
+  DELETE_TODO,
+  COMPLETE_ALL,
+  DUPLICATE_ITEM,
+} from '../constants/ActionTypes'
 
 const initialState = [
   {
@@ -36,6 +42,9 @@ export default function todos(state = initialState, action) {
         done: !areAllMarked,
       }))
 
+    case DUPLICATE_ITEM:
+      console.log(state)
+      debugger
     default:
       return state
   }

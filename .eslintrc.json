@@ -9,6 +9,7 @@
         "object": true
       }
     ],
+    "no-case-declarations": "off",
     "semi": "off",
     "strict": 0,
     "one-var": "off",

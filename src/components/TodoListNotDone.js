@@ -17,6 +17,8 @@ class TodoListNotDone extends Component {
     if (item !== '') {
       this.props.addTodo(item)
 
+      this.props.actions.checkDuplicateItem(item)
+
       this.setState({
         item: '',
       })
@@ -24,7 +26,9 @@ class TodoListNotDone extends Component {
     e.preventDefault()
   }
   handleChange = (e) => {
+
     const { value } = e.target
+    debugger
     this.setState({
       item: value,
     })
