@@ -5,7 +5,7 @@ import {
   COMPLETE_ALL,
   DUPLICATE_ITEM,
 } from '../constants/ActionTypes'
-
+//jotform
 const initialState = [
   {
     id: 0,
