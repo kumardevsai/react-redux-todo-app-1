@@ -11,6 +11,7 @@ const initialState = [
     id: 0,
     todo: 'Use Redux',
     done: false,
+    isDuplicate: false,
   },
 ]
 
@@ -22,6 +23,7 @@ export default function todos(state = initialState, action) {
         {
           id: Date.now(),
           todo: action.text,
+          isDuplicate: action.isItemExists,
           done: false,
         },
       ]
@@ -43,8 +45,8 @@ export default function todos(state = initialState, action) {
       }))
 
     case DUPLICATE_ITEM:
-      console.log(state)
-      debugger
+      console.log(action.text)
+
     default:
       return state
   }

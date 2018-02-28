@@ -1,12 +1,23 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+
 import TodoListAlreadyDone from './TodoListAlreadyDone'
 
-export default class AlreadyDoneList extends Component {
+class AlreadyDoneList extends Component {
   render() {
     return (
       <div className="col-md-6">
         <div className="todolist">
           <h1>Already Done</h1>
+          {this.props.ui.duplicate ? (
+            <img
+              className="img-responsive center-block"
+              src="https://media1.giphy.com/media/l44QoAtMOGDhYjjVu/giphy.gif"
+              alt="duplicate"
+            />
+          ) : (
+            false
+          )}
           <ul id="done-items" className="list-unstyled">
             <TodoListAlreadyDone
               deleteTodo={this.props.actions.deleteTodo}
@@ -18,3 +29,7 @@ export default class AlreadyDoneList extends Component {
     )
   }
 }
+const mapStateToProps = state => ({
+  ui: state.ui,
+})
+export default connect(mapStateToProps)(AlreadyDoneList)

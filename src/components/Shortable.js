@@ -6,10 +6,13 @@ export default class componentName extends Component {
   }
 
   render() {
-    const { todo, isDone, todoId } = this.props
+    const {
+      todo, isDone, todoId, isItemExists,
+    } = this.props
+
     return (
       <Fragment>
-        {isDone ? (
+        {isDone || isItemExists ? (
           ''
         ) : (
           <li className="ui-state-default">
