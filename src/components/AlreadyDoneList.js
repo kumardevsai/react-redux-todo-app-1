@@ -9,14 +9,12 @@ class AlreadyDoneList extends Component {
       <div className="col-md-6">
         <div className="todolist">
           <h1>Already Done</h1>
-          {this.props.ui.duplicate ? (
+          {this.props.ui.duplicate && (
             <img
               className="img-responsive center-block"
               src="https://media1.giphy.com/media/l44QoAtMOGDhYjjVu/giphy.gif"
               alt="duplicate"
             />
-          ) : (
-            false
           )}
           <ul id="done-items" className="list-unstyled">
             <TodoListAlreadyDone
