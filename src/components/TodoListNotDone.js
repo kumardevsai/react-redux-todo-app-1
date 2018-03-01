@@ -10,13 +10,17 @@ class TodoListNotDone extends Component {
     this.state = {
       item: '',
     }
+    this.fetchAPI()
+  }
+
+  fetchAPI() {
+    this.props.actions.fetchSubmissions()
   }
 
   handleSubmit = (e) => {
     const { item } = this.state
     if (item !== '') {
       this.props.addTodo(item)
-
 
       this.setState({
         item: '',
