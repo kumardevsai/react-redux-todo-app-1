@@ -6,24 +6,23 @@ import {
   DUPLICATE_ITEM,
 } from '../constants/ActionTypes'
 // jotform
-const initialState = [
+/* const initialState = [
   {
     id: 0,
     todo: 'Use Redux',
     done: false,
     isDuplicate: false,
   },
-]
+] */
 
-export default function todos(state = initialState, action) {
+export default function todos(state = [], action) {
   switch (action.type) {
     case ADD_TODO:
-      console.log(action)
       let done = action.isDone === '1' ? (done = true) : (done = false)
       return [
         ...state,
         {
-          id: action.id,
+          id: action.id || Date.now(),
           todo: action.text,
           isDuplicate: action.isItemExists,
           done,

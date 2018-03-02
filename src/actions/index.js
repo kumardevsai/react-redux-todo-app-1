@@ -8,9 +8,44 @@ const API_KEY = 'b4268d2e7836001e26df451ee96f2b26'
 const FORM_ID = '80582497523969'
 const FETCH_SUBMISSIONS = 'https://api.jotform.com/form/'
 
-export const completeTodo = id => ({ type: types.COMPLETE_TODO, id, done: true })
-export const completeAll = () => ({ type: types.COMPLETE_ALL })
+export const completeTodo = id => dispatch => (
+  axios({
+    headers: {
+      'content-type': 'application/json',
+    },
+    method: 'post',
+    url: `https://api.jotform.com/submission/${id}?apikey=b4268d2e7836001e26df451ee96f2b26`,
+    params: {
+      'submission[flag]': 1,
+    },
+  })
+    .then(response => response)
+    .catch(error => error),
+  dispatch({ type: types.COMPLETE_TODO, id, done: true })
+)
+
+export const completeAll = () => (dispatch, getState) => {
+  const areAllMarked = getState().todos.every(todo => todo.done)
+  let isDoneTodo
+  areAllMarked ? (isDoneTodo = 0) : (isDoneTodo = 1)
+  getState().todos.map(data =>
+    axios({
+      headers: {
+        'content-type': 'application/json',
+      },
+      method: 'post',
+      url: `https://api.jotform.com/submission/${data.id}?apikey=b4268d2e7836001e26df451ee96f2b26`,
+      params: {
+        'submission[flag]': isDoneTodo,
+      },
+    })
+      .then(res => console.log(res))
+      .catch(err => console.log(err)))
+  dispatch({ type: types.COMPLETE_ALL })
+}
+
 export const deleteTodo = id => ({ type: types.DELETE_TODO, id })
+
 export const addTodo = (text, isDone, id) => (dispatch, getState) => {
   const isItemExists =
     getState()
