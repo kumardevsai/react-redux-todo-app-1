@@ -20,7 +20,7 @@ class TodoListNotDone extends Component {
   handleSubmit = (e) => {
     const { item } = this.state
     if (item !== '') {
-      this.props.addTodo(item)
+      this.props.actions.fetchPOST(item)
 
       this.setState({
         item: '',
@@ -50,19 +50,16 @@ class TodoListNotDone extends Component {
           />
           <hr />
           <ul id="sortable" className="list-unstyled">
-            {this.props.todos
-              /* .slice(0)
-            .reverse() */
-              .map(todo => (
-                <Shortable
-                  onDoneItem={this.props.actions.completeTodo}
-                  key={todo.id}
-                  isDone={todo.done}
-                  todoId={todo.id}
-                  todo={todo.todo}
-                  isItemExists={todo.isDuplicate}
-                />
-              ))}
+            {this.props.todos.map(todo => (
+              <Shortable
+                onDoneItem={this.props.actions.completeTodo}
+                key={todo.id}
+                isDone={todo.done}
+                todoId={todo.id}
+                todo={todo.todo}
+                isItemExists={todo.isDuplicate}
+              />
+            ))}
           </ul>
           <TodoFooter itemLeft={this.props.todos} />
         </div>

@@ -44,7 +44,13 @@ export const completeAll = () => (dispatch, getState) => {
   dispatch({ type: types.COMPLETE_ALL })
 }
 
-export const deleteTodo = id => ({ type: types.DELETE_TODO, id })
+export const deleteTodo = id => (dispatch, getState) => {
+  const URL = `https://api.jotform.com/submission/${id}?apikey=b4268d2e7836001e26df451ee96f2b26`
+  axios
+    .delete(URL, { params: { id } })
+    .then(res => dispatch({ type: types.DELETE_TODO, id }))
+    .catch(err => console.log(err))
+}
 
 export const addTodo = (text, isDone, id) => (dispatch, getState) => {
   const isItemExists =
@@ -75,9 +81,25 @@ export const fetchSubmissions = () => (dispatch) => {
       const a = get.data.content.map(data =>
         _.merge(data.answers, { done: data.flag }, { id: data.id }))
       const x = a.map(data => _.merge(data[3], { done: data.done }, { id: data.id }))
-      x.map(data => dispatch(addTodo(data.answer, data.done, data.id)))
+      x.map(data => dispatch(addTodo(data.answer || 'test', data.done, data.id)))
     })
     .catch((error) => {
       console.log(error)
     })
+}
+
+export const fetchPOST = text => (dispatch) => {
+  const url = `${FETCH_SUBMISSIONS}/${FORM_ID}/submissions?apikey=${API_KEY}`
+  axios({
+    headers: {
+      'content-type': 'application/json',
+    },
+    method: 'post',
+    url,
+    params: {
+      'submission[3]': text,
+    },
+  })
+    .then(res => dispatch(addTodo(text, false, res.data.content.submissionID)))
+    .catch(err => console.log(err))
 }

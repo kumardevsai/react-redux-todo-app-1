@@ -22,7 +22,7 @@ export default function todos(state = [], action) {
       return [
         ...state,
         {
-          id: action.id || Date.now(),
+          id: action.id === '#SampleSubmissionID' ? Date.now() : action.id,
           todo: action.text,
           isDuplicate: action.isItemExists,
           done,
