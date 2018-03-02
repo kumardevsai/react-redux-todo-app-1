@@ -11,7 +11,7 @@ const FETCH_SUBMISSIONS = 'https://api.jotform.com/form/'
 export const completeTodo = id => ({ type: types.COMPLETE_TODO, id, done: true })
 export const completeAll = () => ({ type: types.COMPLETE_ALL })
 export const deleteTodo = id => ({ type: types.DELETE_TODO, id })
-export const addTodo = text => (dispatch, getState) => {
+export const addTodo = (text, isDone, id) => (dispatch, getState) => {
   const isItemExists =
     getState()
       .todos.filter(todo => todo.done === false && todo.isDuplicate === false)
@@ -21,9 +21,14 @@ export const addTodo = text => (dispatch, getState) => {
       dispatch({ type: Uitypes.NOTIFICATION_FALSE, isItemExists })
     }, 1000)
   }
-  //
-  console.log('pikacu', text)
-  dispatch({ type: types.ADD_TODO, text, isItemExists })
+
+  dispatch({
+    type: types.ADD_TODO,
+    text,
+    isItemExists,
+    isDone,
+    id,
+  })
   dispatch({ type: Uitypes.NOTIFICATION_TRUE, isItemExists })
 }
 
@@ -32,18 +37,12 @@ export const fetchSubmissions = () => (dispatch) => {
   const request = axios.get(url)
   request
     .then((get) => {
-      const temp = get.data.content.map(data => data.answers)
-      const answer = temp.map(data => data[3])
-      answer.map(data => dispatch(addTodo(data.answer)))
-
-      // console.log(ans)
+      const a = get.data.content.map(data =>
+        _.merge(data.answers, { done: data.flag }, { id: data.id }))
+      const x = a.map(data => _.merge(data[3], { done: data.done }, { id: data.id }))
+      x.map(data => dispatch(addTodo(data.answer, data.done, data.id)))
     })
     .catch((error) => {
       console.log(error)
     })
 }
-
-/**
- * Bildirim görüntülenmesini,, UiAction'da yap.
-
- */

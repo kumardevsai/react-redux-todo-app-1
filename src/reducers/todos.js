@@ -18,13 +18,15 @@ const initialState = [
 export default function todos(state = initialState, action) {
   switch (action.type) {
     case ADD_TODO:
+      console.log(action)
+      let done = action.isDone === '1' ? (done = true) : (done = false)
       return [
         ...state,
         {
-          id: Date.now(),
+          id: action.id,
           todo: action.text,
           isDuplicate: action.isItemExists,
-          done: false,
+          done,
         },
       ]
 
