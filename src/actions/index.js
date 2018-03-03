@@ -25,7 +25,9 @@ export const completeTodo = id => dispatch => (
 export const completeAll = () => (dispatch, getState) => {
   const areAllMarked = getState().todos.every(todo => todo.done)
   let isDoneTodo = 1
-  areAllMarked ? (isDoneTodo = 0) : isDoneTodo
+  if (areAllMarked) {
+    isDoneTodo = 0
+  }
   getState().todos.map(data =>
     axios({
       method: 'post',
