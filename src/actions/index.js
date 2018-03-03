@@ -1,8 +1,11 @@
 import axios from 'axios'
+
 import _ from 'lodash'
 
 import * as types from '../constants/ActionTypes'
 import * as Uitypes from '../constants/UiActionTypes'
+
+axios.defaults.headers.post['content-type'] = 'application/json'
 
 const API_KEY = 'b4268d2e7836001e26df451ee96f2b26'
 const FORM_ID = '80582497523969'
@@ -10,9 +13,6 @@ const FETCH_SUBMISSIONS = 'https://api.jotform.com/form/'
 
 export const completeTodo = id => dispatch => (
   axios({
-    headers: {
-      'content-type': 'application/json',
-    },
     method: 'post',
     url: `https://api.jotform.com/submission/${id}?apikey=b4268d2e7836001e26df451ee96f2b26`,
     params: {
@@ -30,26 +30,18 @@ export const completeAll = () => (dispatch, getState) => {
   areAllMarked ? (isDoneTodo = 0) : isDoneTodo
   getState().todos.map(data =>
     axios({
-      headers: {
-        'content-type': 'application/json',
-      },
       method: 'post',
       url: `https://api.jotform.com/submission/${data.id}?apikey=b4268d2e7836001e26df451ee96f2b26`,
       params: {
         'submission[flag]': isDoneTodo,
       },
-    })
-      .then(res => console.log(res))
-      .catch(err => console.log(err)))
+    }))
   dispatch({ type: types.COMPLETE_ALL })
 }
 
 export const deleteTodo = id => (dispatch) => {
   const URL = `https://api.jotform.com/submission/${id}?apikey=b4268d2e7836001e26df451ee96f2b26`
-  axios
-    .delete(URL, { params: { id } })
-    .then(res => dispatch({ type: types.DELETE_TODO, id }))
-    .catch(err => console.log(err))
+  axios.delete(URL, { params: { id } }).then(dispatch({ type: types.DELETE_TODO, id }))
 }
 
 export const addTodo = (text, isDone, id, isItemExists = false) => (dispatch) => {
@@ -85,9 +77,6 @@ export const fetchPOST = text => (dispatch, getState) => {
   if (isItemExists !== true) {
     const url = `${FETCH_SUBMISSIONS}/${FORM_ID}/submissions?apikey=${API_KEY}`
     axios({
-      headers: {
-        'content-type': 'application/json',
-      },
       method: 'post',
       url,
       params: {
