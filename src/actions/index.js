@@ -18,9 +18,7 @@ export const completeTodo = id => dispatch => (
     params: {
       'submission[flag]': 1,
     },
-  })
-    .then(response => response)
-    .catch(error => error),
+  }),
   dispatch({ type: types.COMPLETE_TODO, id, done: true })
 )
 
@@ -54,37 +52,31 @@ export const addTodo = (text, isDone, id, isItemExists = false) => (dispatch) =>
   })
 }
 
-export const fetchSubmissions = () => (dispatch) => {
+export const fetchSubmissions = () => async (dispatch) => {
   const url = `${FETCH_SUBMISSIONS}/${FORM_ID}/submissions?apikey=${API_KEY}&orderby=id`
-  const request = axios.get(url)
-  request
-    .then((get) => {
-      const a = get.data.content.map(data =>
-        _.merge(data.answers, { done: data.flag }, { id: data.id }))
-      const x = a.map(data => _.merge(data[3], { done: data.done }, { id: data.id }))
-      x.map(data => dispatch(addTodo(data.answer || 'test', data.done, data.id)))
-    })
-    .catch((error) => {
-      console.log(error)
-    })
+  const { data } = await axios.get(url)
+  const a = data.content.map(resData =>
+    _.merge(resData.answers, { done: resData.flag }, { id: resData.id }))
+  const x = a.map(resData => _.merge(resData[3], { done: resData.done }, { id: resData.id }))
+  x.map(resData => dispatch(addTodo(resData.answer || 'test', resData.done, resData.id)))
 }
 
-export const fetchPOST = text => (dispatch, getState) => {
+export const fetchPOST = text => async (dispatch, getState) => {
   const isItemExists =
     getState()
       .todos.filter(todo => todo.done === false && todo.isDuplicate === false)
       .findIndex(todo => todo.todo === text) > -1
+
   if (isItemExists !== true) {
     const url = `${FETCH_SUBMISSIONS}/${FORM_ID}/submissions?apikey=${API_KEY}`
-    axios({
+    const { data } = await axios({
       method: 'post',
       url,
       params: {
         'submission[3]': text,
       },
     })
-      .then(res => dispatch(addTodo(text, false, res.data.content.submissionID)))
-      .catch(err => console.log(err))
+    dispatch(addTodo(text, false, data.content.submissionID))
   } else {
     setTimeout(() => {
       dispatch({ type: Uitypes.NOTIFICATION_FALSE, isItemExists })
