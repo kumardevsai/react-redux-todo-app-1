@@ -26,8 +26,8 @@ export const completeTodo = id => dispatch => (
 
 export const completeAll = () => (dispatch, getState) => {
   const areAllMarked = getState().todos.every(todo => todo.done)
-  let isDoneTodo
-  areAllMarked ? (isDoneTodo = 0) : (isDoneTodo = 1)
+  let isDoneTodo = 1
+  areAllMarked ? (isDoneTodo = 0) : isDoneTodo
   getState().todos.map(data =>
     axios({
       headers: {
@@ -44,7 +44,7 @@ export const completeAll = () => (dispatch, getState) => {
   dispatch({ type: types.COMPLETE_ALL })
 }
 
-export const deleteTodo = id => (dispatch, getState) => {
+export const deleteTodo = id => (dispatch) => {
   const URL = `https://api.jotform.com/submission/${id}?apikey=b4268d2e7836001e26df451ee96f2b26`
   axios
     .delete(URL, { params: { id } })
@@ -52,17 +52,7 @@ export const deleteTodo = id => (dispatch, getState) => {
     .catch(err => console.log(err))
 }
 
-export const addTodo = (text, isDone, id) => (dispatch, getState) => {
-  const isItemExists =
-    getState()
-      .todos.filter(todo => todo.done === false && todo.isDuplicate === false)
-      .findIndex(todo => todo.todo === text) > -1
-  if (isItemExists === true) {
-    setTimeout(() => {
-      dispatch({ type: Uitypes.NOTIFICATION_FALSE, isItemExists })
-    }, 1000)
-  }
-
+export const addTodo = (text, isDone, id, isItemExists = false) => (dispatch) => {
   dispatch({
     type: types.ADD_TODO,
     text,
@@ -70,7 +60,6 @@ export const addTodo = (text, isDone, id) => (dispatch, getState) => {
     isDone,
     id,
   })
-  dispatch({ type: Uitypes.NOTIFICATION_TRUE, isItemExists })
 }
 
 export const fetchSubmissions = () => (dispatch) => {
@@ -88,18 +77,29 @@ export const fetchSubmissions = () => (dispatch) => {
     })
 }
 
-export const fetchPOST = text => (dispatch) => {
-  const url = `${FETCH_SUBMISSIONS}/${FORM_ID}/submissions?apikey=${API_KEY}`
-  axios({
-    headers: {
-      'content-type': 'application/json',
-    },
-    method: 'post',
-    url,
-    params: {
-      'submission[3]': text,
-    },
-  })
-    .then(res => dispatch(addTodo(text, false, res.data.content.submissionID)))
-    .catch(err => console.log(err))
+export const fetchPOST = text => (dispatch, getState) => {
+  const isItemExists =
+    getState()
+      .todos.filter(todo => todo.done === false && todo.isDuplicate === false)
+      .findIndex(todo => todo.todo === text) > -1
+  if (isItemExists !== true) {
+    const url = `${FETCH_SUBMISSIONS}/${FORM_ID}/submissions?apikey=${API_KEY}`
+    axios({
+      headers: {
+        'content-type': 'application/json',
+      },
+      method: 'post',
+      url,
+      params: {
+        'submission[3]': text,
+      },
+    })
+      .then(res => dispatch(addTodo(text, false, res.data.content.submissionID)))
+      .catch(err => console.log(err))
+  } else {
+    setTimeout(() => {
+      dispatch({ type: Uitypes.NOTIFICATION_FALSE, isItemExists })
+    }, 1000)
+  }
+  dispatch({ type: Uitypes.NOTIFICATION_TRUE, isItemExists })
 }
