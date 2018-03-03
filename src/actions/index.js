@@ -37,9 +37,14 @@ export const completeAll = () => (dispatch, getState) => {
   dispatch({ type: types.COMPLETE_ALL })
 }
 
-export const deleteTodo = id => (dispatch) => {
+export const deleteTodo = id => async (dispatch) => {
   const URL = `https://api.jotform.com/submission/${id}?apikey=b4268d2e7836001e26df451ee96f2b26`
-  axios.delete(URL, { params: { id } }).then(dispatch({ type: types.DELETE_TODO, id }))
+  try {
+    await axios.delete(URL, { params: { id } })
+    dispatch({ type: types.DELETE_TODO, id })
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 export const addTodo = (text, isDone, id, isItemExists = false) => (dispatch) => {
