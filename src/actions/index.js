@@ -62,10 +62,14 @@ export const addTodo = (text, isDone, id, isItemExists = false) => (dispatch) =>
 export const fetchSubmissions = () => async (dispatch) => {
   const url = `${FETCH_SUBMISSIONS}/${FORM_ID}/submissions?apikey=${API_KEY}&orderby=id`
   const { data } = await axios.get(url)
-  const a = data.content.map(resData =>
-    _.merge(resData.answers, { done: resData.flag }, { id: resData.id }))
-  const x = a.map(resData => _.merge(resData[3], { done: resData.done }, { id: resData.id }))
-  x.map(resData => dispatch(addTodo(resData.answer || 'test', resData.done, resData.id)))
+
+  const obj = data.content.map(resultSet => ({
+    ...resultSet.answers[Object.keys(resultSet.answers)[0]],
+    done: resultSet.flag,
+    id: resultSet.id,
+  }))
+
+  obj.map(resData => dispatch(addTodo(resData.answer, resData.done, resData.id)))
 }
 
 export const fetchPOST = text => async (dispatch, getState) => {

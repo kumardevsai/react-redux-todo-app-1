@@ -22,7 +22,7 @@ export default function todos(state = [], action) {
       return [
         ...state,
         {
-          id: action.id === '#SampleSubmissionID' ? Date.now() : action.id,
+          id: action.id,
           todo: action.text,
           isDuplicate: action.isItemExists,
           done,
@@ -44,9 +44,6 @@ export default function todos(state = [], action) {
         ...todo,
         done: !areAllMarked,
       }))
-
-    case DUPLICATE_ITEM:
-      console.log(action.text)
 
     default:
       return state

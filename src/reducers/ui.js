@@ -1,6 +1,13 @@
 import { NOTIFICATION_TRUE, NOTIFICATION_FALSE } from '../constants/UiActionTypes'
 
-const notifications = (state = '', action) => {
+const initialState = [
+  {
+    duplicate: false,
+    error: false,
+  },
+]
+
+const notifications = (state = initialState, action) => {
   switch (action.type) {
     case NOTIFICATION_TRUE:
       return {
@@ -9,7 +16,7 @@ const notifications = (state = '', action) => {
       }
     case NOTIFICATION_FALSE:
       return {
-        duplicate: !action.isItemExists,
+        duplicate: false,
         error: false,
       }
     default:

@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 
 export default class componentName extends Component {
-  handleCheckItem = (e) => {
+  handleCheckItem = () => {
     this.props.onDoneItem(this.props.todoId)
   }
 
