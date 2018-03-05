@@ -9,8 +9,8 @@ import * as UiAction from '../actions/UiAction'
 const App = ({ todos, actions, notifications }) => (
   <div className="container">
     <div className="row">
-      <TodoListNotDone todos={todos} actions={actions} addTodo={actions.addTodo} />
-      <AlreadyDoneList notifications={notifications} todos={todos} actions={actions} />
+      <TodoListNotDone actions={actions} />
+      <AlreadyDoneList notifications={notifications} actions={actions} />
     </div>
   </div>
 )
