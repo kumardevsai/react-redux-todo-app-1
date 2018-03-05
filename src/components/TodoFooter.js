@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
-export default class componentName extends Component {
+class TodoFooter extends Component {
   render() {
-    const todoIsNotDone = this.props.itemLeft.filter(item => item.done === false && item.isDuplicate === false)
+    const todoIsNotDone = this.props.todos.filter(item => item.done === false && item.isItemExists === false)
     return (
       <div className="todo-footer">
         <strong>
@@ -13,3 +14,8 @@ export default class componentName extends Component {
     )
   }
 }
+
+const mapStateToProps = state => ({
+  todos: state.todos,
+})
+export default connect(mapStateToProps)(TodoFooter)

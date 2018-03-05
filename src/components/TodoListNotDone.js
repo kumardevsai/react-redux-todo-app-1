@@ -50,24 +50,13 @@ class TodoListNotDone extends Component {
           />
           <hr />
           <ul id="sortable" className="list-unstyled">
-            {this.props.todos.map(todo => (
-              <Shortable
-                onDoneItem={this.props.actions.completeTodo}
-                key={todo.id}
-                isDone={todo.done}
-                todoId={todo.id}
-                todo={todo.todo}
-                isItemExists={todo.isDuplicate}
-              />
-            ))}
+            <Shortable onDoneItem={this.props.actions.completeTodo} />
           </ul>
-          <TodoFooter itemLeft={this.props.todos} />
+          <TodoFooter />
         </div>
       </div>
     )
   }
 }
-
-// addCounter actions'taki
 
 export default TodoListNotDone

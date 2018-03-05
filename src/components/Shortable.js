@@ -1,36 +1,36 @@
 import React, { Component, Fragment } from 'react'
+import { connect } from 'react-redux'
 
-export default class componentName extends Component {
-  handleCheckItem = () => {
-    this.props.onDoneItem(this.props.todoId)
+class componentName extends Component {
+  handleCheckItem = (e) => {
+    this.props.onDoneItem(e.target.value)
   }
 
   render() {
-    const {
-      todo, isDone, todoId, isItemExists,
-    } = this.props
-
     return (
       <Fragment>
-        {isDone || isItemExists ? (
-          ''
-        ) : (
-          <li className="ui-state-default">
-            <div className="checkbox">
-              <label>
-                <input
-                  value={todoId}
-                  name="todoCheck"
-                  type="checkbox"
-                  onChange={this.handleCheckItem}
-                  checked={isDone}
-                />{' '}
-                {todo}
-              </label>
-            </div>
-          </li>
-        )}
+        {this.props.todos.map((todo, i) =>
+            (todo.done || todo.isItemExists ? null : (
+              <li key={i} className="ui-state-default">
+                <div className="checkbox">
+                  <label>
+                    <input
+                      value={todo.id}
+                      name="todoCheck"
+                      type="checkbox"
+                      onChange={e => this.handleCheckItem(e)}
+                      checked={todo.done}
+                    />{' '}
+                    {todo.text}
+                  </label>
+                </div>
+              </li>
+            )))}
       </Fragment>
     )
   }
 }
+const mapStateToProps = state => ({
+  todos: state.todos,
+})
+export default connect(mapStateToProps)(componentName)

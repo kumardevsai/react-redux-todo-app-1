@@ -17,10 +17,7 @@ class AlreadyDoneList extends Component {
             />
           )}
           <ul id="done-items" className="list-unstyled">
-            <TodoListAlreadyDone
-              deleteTodo={this.props.actions.deleteTodo}
-              todos={this.props.todos}
-            />
+            <TodoListAlreadyDone deleteTodo={this.props.actions.deleteTodo} />
           </ul>
         </div>
       </div>

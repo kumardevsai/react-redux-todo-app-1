@@ -1,33 +1,15 @@
-import {
-  ADD_TODO,
-  COMPLETE_TODO,
-  DELETE_TODO,
-  COMPLETE_ALL,
-  DUPLICATE_ITEM,
-} from '../constants/ActionTypes'
-// jotform
-/* const initialState = [
-  {
-    id: 0,
-    todo: 'Use Redux',
-    done: false,
-    isDuplicate: false,
-  },
-] */
+import { ADD_TODO, COMPLETE_TODO, DELETE_TODO, COMPLETE_ALL } from '../constants/ActionTypes'
 
 export default function todos(state = [], action) {
   switch (action.type) {
     case ADD_TODO:
-      let done = action.isDone === '1' ? (done = true) : (done = false)
-      return [
-        ...state,
-        {
-          id: action.id,
-          todo: action.text,
-          isDuplicate: action.isItemExists,
-          done,
-        },
-      ]
+      const a = action.payload.map(todo => ({
+        text: todo.answer || todo.text,
+        done: todo.done === '1',
+        id: todo.id,
+        isItemExists: false,
+      }))
+      return [...state, ...a]
 
     case COMPLETE_TODO:
       return state.map(todo => (todo.id === action.id ? { ...todo, done: !todo.done } : todo))

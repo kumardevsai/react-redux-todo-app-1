@@ -1,7 +1,5 @@
 import axios from 'axios'
 
-import _ from 'lodash'
-
 import * as types from '../constants/ActionTypes'
 import * as Uitypes from '../constants/UiActionTypes'
 
@@ -14,7 +12,7 @@ const FETCH_SUBMISSIONS = 'https://api.jotform.com/form/'
 export const completeTodo = id => dispatch => (
   axios({
     method: 'post',
-    url: `https://api.jotform.com/submission/${id}?apikey=b4268d2e7836001e26df451ee96f2b26`,
+    url: `https://api.jotform.com/submission/${id}?apikey=${API_KEY}`,
     params: {
       'submission[flag]': 1,
     },
@@ -31,7 +29,7 @@ export const completeAll = () => (dispatch, getState) => {
   getState().todos.map(data =>
     axios({
       method: 'post',
-      url: `https://api.jotform.com/submission/${data.id}?apikey=b4268d2e7836001e26df451ee96f2b26`,
+      url: `https://api.jotform.com/submission/${data.id}?apikey=${API_KEY}`,
       params: {
         'submission[flag]': isDoneTodo,
       },
@@ -40,7 +38,7 @@ export const completeAll = () => (dispatch, getState) => {
 }
 
 export const deleteTodo = id => async (dispatch) => {
-  const URL = `https://api.jotform.com/submission/${id}?apikey=b4268d2e7836001e26df451ee96f2b26`
+  const URL = `https://api.jotform.com/submission/${id}?apikey=${API_KEY}`
   try {
     await axios.delete(URL, { params: { id } })
     dispatch({ type: types.DELETE_TODO, id })
@@ -49,34 +47,27 @@ export const deleteTodo = id => async (dispatch) => {
   }
 }
 
-export const addTodo = (text, isDone, id, isItemExists = false) => (dispatch) => {
-  dispatch({
-    type: types.ADD_TODO,
-    text,
-    isItemExists,
-    isDone,
-    id,
-  })
-}
-
 export const fetchSubmissions = () => async (dispatch) => {
   const url = `${FETCH_SUBMISSIONS}/${FORM_ID}/submissions?apikey=${API_KEY}&orderby=id`
   const { data } = await axios.get(url)
 
   const obj = data.content.map(resultSet => ({
-    ...resultSet.answers[Object.keys(resultSet.answers)[0]],
+    ...resultSet.answers[3],
     done: resultSet.flag,
     id: resultSet.id,
   }))
 
-  obj.map(resData => dispatch(addTodo(resData.answer, resData.done, resData.id)))
+  dispatch({
+    type: types.ADD_TODO,
+    payload: obj,
+  })
 }
 
 export const fetchPOST = text => async (dispatch, getState) => {
   const isItemExists =
     getState()
-      .todos.filter(todo => todo.done === false && todo.isDuplicate === false)
-      .findIndex(todo => todo.todo === text) > -1
+      .todos.filter(todo => todo.done === false && todo.isItemExists === false)
+      .findIndex(todo => todo.text === text) > -1
 
   if (isItemExists !== true) {
     const url = `${FETCH_SUBMISSIONS}/${FORM_ID}/submissions?apikey=${API_KEY}`
@@ -87,7 +78,19 @@ export const fetchPOST = text => async (dispatch, getState) => {
         'submission[3]': text,
       },
     })
-    dispatch(addTodo(text, false, data.content.submissionID))
+    const ObjectTodo = [
+      {
+        text,
+        done: false,
+        id: data.content.submissionID,
+        isItemExists: false,
+      },
+    ]
+
+    dispatch({
+      type: types.ADD_TODO,
+      payload: ObjectTodo,
+    })
   } else {
     setTimeout(() => {
       dispatch({ type: Uitypes.NOTIFICATION_FALSE, isItemExists })
