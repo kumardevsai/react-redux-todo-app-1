@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
 import AddTodo from './AddTodo'
-import Shortable from './Shortable'
+import Sortable from './Sortable'
 import TodoFooter from './TodoFooter'
 
 class TodoListNotDone extends Component {
@@ -50,7 +50,7 @@ class TodoListNotDone extends Component {
           />
           <hr />
           <ul id="sortable" className="list-unstyled">
-            <Shortable onDoneItem={this.props.actions.completeTodo} />
+            <Sortable onDoneItem={this.props.actions.completeTodo} />
           </ul>
           <TodoFooter />
         </div>
