@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 
-class componentName extends Component {
+class Sortable extends Component {
   handleCheckItem = (e) => {
     this.props.onDoneItem(e.target.value)
   }
@@ -33,4 +33,4 @@ class componentName extends Component {
 const mapStateToProps = state => ({
   todos: state.todos,
 })
-export default connect(mapStateToProps)(componentName)
+export default connect(mapStateToProps)(Sortable)
